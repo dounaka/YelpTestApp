@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "ca.bell.test.app"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+
+        debug {
+            buildConfigField "String", "CLIENT_ID", "\"Tm5hNcHSX1sXJbB7QeMndQ\""
+            buildConfigField "String", "API_KEY", "\"mX6RpfoSatLuBA3HEo0RfpmXigrj9_gLiyUVip1w-XPZpnu7EKi4I3ZUq9mAVFLUJK7bSW42xoj9oWj3bYcmiHQzp8osLIwk3fDgsSotM2ZQt_OKp6prCQACcPIwW3Yx\""
+        }
+        release {
+            //TODO update with production yelp account
+            buildConfigField "String", "CLIENT_ID", "\"PROD_CLIENT_ID\""
+            buildConfigField "String", "API_KEY", "\"PROD_API_KEY\""
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support:support-vector-drawable:27.1.1'
+
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+
+    implementation 'com.android.volley:volley:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}

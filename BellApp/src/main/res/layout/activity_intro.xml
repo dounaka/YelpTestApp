@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntroActivity">
+
+    <ImageView
+        android:id="@+id/imgIntro"
+        android:layout_width="@dimen/intro_img_width"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/title_activity_intro"
+        android:src="@drawable/hungry" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/imgIntro"
+        android:layout_centerHorizontal="true"
+        android:text="@string/into_msg02"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/txtTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/space_small"
+        android:text="@string/into_msg01"
+        android:textColor="@color/colorPrimary" />
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgIntro"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/space_small"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorPrimary" />
+</RelativeLayout>

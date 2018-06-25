@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Find Resto</string>
+    <string name="into_msg01">Hungry ?</string>
+    <string name="into_msg02">Find a resto now !</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_intro">IntroActivity</string>
+</resources>
