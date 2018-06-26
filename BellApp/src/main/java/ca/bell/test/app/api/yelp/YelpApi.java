@@ -1,33 +1,46 @@
 package ca.bell.test.app.api.yelp;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
 import com.android.volley.Network;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.bell.test.app.BuildConfig;
+import ca.bell.test.app.api.RestoApi;
+import ca.bell.test.app.resto.Search;
+/*
+ *  Android library
+    Copyright (C) 2018 Icati inc. - Canada
 
-public class YelpApi {
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    http://www.gnu.org/licenses/gpl.html
+ */
+public class YelpApi implements RestoApi {
     private static YelpApi mInstance;
     private RequestQueue mRequestQueue;
     private static Context mCtx;
-    private static Cache
-            mCache;
-
+    private static Cache mCache;
 
     private static final String TAG = "YELP_API";
 
@@ -58,33 +71,50 @@ public class YelpApi {
     }
 
 
-    public void request() {
-        String url2 = "https://api.yelp.com/v3/businesses/search?location=montreal&term=sushi";
-        String url = "https://api.yelp.com/v3/autocomplete?text=del&latitude=37.786882&longitude=-122.399972";
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url2,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "RESPONSE " + response);
-                        // Do something with the response
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {error.printStackTrace();
-                        Log.e(TAG, "RESPONSE " + error.getMessage());// Handle error
-                    }
-                }) {
+    public void request(final Search search, final SearchResponse searchResponse) {
+        StringBuilder urlSearch = new StringBuilder("https://api.yelp.com/v3/businesses/search?");
+
+        final Map<String, String> params = new HashMap<>();
+        if (search.getQuery() != null)
+            urlSearch.append("term=" + search.getQuery());
+        if (search.getLocation() != null)
+            urlSearch.append( "&location=" + search.getLocation());
+        else  {
+            urlSearch.append( "&latitude=" + search.getLat());
+            urlSearch.append("&longitude=" + search.getLng());
+        }
+
+
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + BuildConfig.API_KEY);
+
+
+        final Response.Listener<Search> responseSearch = new Response.Listener<Search>() {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers2 =  new HashMap<>();
-                headers2.putAll(super.getHeaders());
-                headers2.put("Authorization", "Bearer " + BuildConfig.API_KEY);
-                return headers2;
+            public void onResponse(Search response) {
+                response.setQuery(search.getQuery());
+                response.setLocation(search.getLocation());
+                response.setLat(search.getLat());
+                response.setLng(search.getLng());
+                searchResponse.onSuccess(response);
             }
         };
-        stringRequest.setTag(TAG);
-        mRequestQueue.add(stringRequest);
+
+        Response.ErrorListener responseError = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                searchResponse.onError(error);
+            }
+        };
+
+        GsonRequest<Search> searchGsonRequest = new GsonRequest<>(urlSearch.toString(), Search.class, headers,
+                responseSearch, responseError);
+
+
+        searchGsonRequest.setTag(TAG);
+
+
+        mRequestQueue.add(searchGsonRequest);
     }
 
 
@@ -94,29 +124,16 @@ public class YelpApi {
         }
     }
 
-    public void request2() {
 
-
-        String url = "http://www.example.com";
-
-// Formulate the request and handle the response.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Do something with the response
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                    }
-                });
-
-// Add the request to the RequestQueue.
-        mRequestQueue.add(stringRequest);
+    @Override
+    public void search(Search search, SearchResponse response) {
+        // check if has string location
+        // else if has position
+        request(search, response);
     }
+
+
+
 }
 
 

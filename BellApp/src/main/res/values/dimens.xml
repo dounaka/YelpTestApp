@@ -6,4 +6,13 @@
     <dimen name="space_small">8dp</dimen>
     <dimen name="space_medium">16dp</dimen>
     <dimen name="space_large">32dp</dimen>
+
+
+    <dimen name="cardview_elevation">4dp</dimen>
+    <dimen name="cardview_corner_radius">8dp</dimen>
+
+    <dimen name="text_size_giant">36sp</dimen>
+    <dimen name="text_size_big">18sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+
 </resources>

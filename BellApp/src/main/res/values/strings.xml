@@ -2,8 +2,18 @@
     <string name="app_name">Find Resto</string>
     <string name="into_msg01">Hungry ?</string>
     <string name="into_msg02">Find a resto now !</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_search">Search</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_history">History</string>
+    <string name="ok">Ok</string>
     <string name="title_activity_intro">IntroActivity</string>
+    <string name="search_location_hint">Search by address, city, postal code</string>
+    <string name="search_business_hint">Search by business name</string>
+
+
+
+    <string name="permission_not_granted">Permissions were not granted.</string>
+    <string name="permission_location_available">Location Permissions have been granted.</string>
+    <string name="permission_location_rationale">Location Permission is useful to find quickly your position on the map.</string>
+
 </resources>
