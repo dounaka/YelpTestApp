@@ -2,14 +2,16 @@ package ca.bell.test.app.ui.resto;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.Spinner;
 
 import ca.bell.test.app.R;
 import ca.bell.test.app.resto.Business;
@@ -104,9 +106,17 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
             }
         };
         recyclerView.setAdapter(mAdapterBusiness);
+        AppCompatSpinner spinner = findViewById(R.id.spinnerSort);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.businessSortBy, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
+    boolean ignoreChange = true;
+
     private void onNewSearch() {
+        if (ignoreChange) return;
         if (entity == null) entity = new Search();
         else
             clearResults();
@@ -132,22 +142,22 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
     }
 
     private void clearResults() {
-
         entity.getBusinesses().clear();
         mAdapterBusiness.setEntities(entity.getBusinesses());
         mAdapterBusiness.notifyDataSetChanged();
     }
 
-    private final void search() {
-        Toast.makeText(getContext(), "Run search !" + System.currentTimeMillis(), Toast.LENGTH_SHORT).show();
-    }
 
 
     @Override
     protected void showEntity(Search search) {
+        ignoreChange = true;
+        mEditSearchBusiness.setText(entity.getQuery());
+        mEditSearchLocation.setText(entity.getLocation());
         search.sortByDistance(true);
         mAdapterBusiness.setEntities(search.getBusinesses());
         mAdapterBusiness.notifyDataSetChanged();
+        ignoreChange = false;
     }
 
     @Override

@@ -73,6 +73,8 @@ public class SearchFragment extends Fragment implements SearchView.Listener {
         super.onViewCreated(view, savedInstanceState);
         if (mSearchModel.getViewModel().getValue() == null)
             mSearchModel.getViewModel().setValue(new Search());
+        else
+            mSearchView.show(mSearchModel.getViewModel().getValue());
     }
 
     @Override

@@ -16,4 +16,12 @@
     <string name="permission_location_available">Location Permissions have been granted.</string>
     <string name="permission_location_rationale">Location Permission is useful to find quickly your position on the map.</string>
 
+
+    <string-array name="businessSortBy">
+        <item>Sort by distance ascendant</item>
+        <item>Sort by distance descendant</item>
+        <item>Sort by rating ascendant</item>
+        <item>Sort by rating descendant</item>
+    </string-array>
+
 </resources>
