@@ -142,6 +142,12 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
         postDelayed(actionToRun, 2000 /*delay*/);
     }
 
+
+    public void onViewRemoved() {
+        if (actionToRun != null)
+            removeCallbacks(actionToRun);
+    }
+
     private void clearResults() {
         entity.getBusinesses().clear();
         mAdapterBusiness.setEntities(entity.getBusinesses());

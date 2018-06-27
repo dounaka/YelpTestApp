@@ -3,8 +3,6 @@ package ca.bell.test.app.ui.resto;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,7 +43,7 @@ public class BusinessDetailView extends EntityView<Business> {
 
     private BusinessListItemView mViewBusinessItem;
     private LinearLayout mHscrollviewPhotos;
-    private TextView mTxtPhone, mTxtAddress, mTxtCategs;
+    private TextView mTxtPhone, mTxtAddress, mTxtCategs, mTxtHours;
     @Override
     public int getViewResourceId() {
         return R.layout.view_business_detail;
@@ -57,6 +55,7 @@ public class BusinessDetailView extends EntityView<Business> {
         mTxtAddress = findViewById(R.id.txtAddress);
         mTxtPhone = findViewById(R.id.txtPhone);
         mTxtCategs = findViewById(R.id.txtCategs);
+        mTxtHours = findViewById(R.id.txtHours);
         mViewBusinessItem = findViewById(R.id.viewBusinessItem);
         mViewBusinessItem.setFlatView();
     }
@@ -78,6 +77,26 @@ public class BusinessDetailView extends EntityView<Business> {
         mTxtCategs.setText(displayCategs.toString());
 
 
+        StringBuilder displayHours = new StringBuilder();
+        if (business.getHours() != null)
+            for (Business.WeekService weekService : business.getHours()) {
+            //TODO refactoring replace Strings by constants
+                displayHours.append("\n" + (weekService.isOpenNow() ?
+                        getResources().getString(R.string.open_now) :
+                        getResources().getString(R.string.close_now)));
+
+                displayHours.append(" (" + weekService.getHoursType() + ")");
+                for (Business.DayService dayService : weekService.getOpen()) {
+                    displayHours.append("\n" + getDay(dayService.getDay()));
+                    displayHours.append(" " + dayService.getStart());
+                    displayHours.append(" - ");
+                    displayHours.append(dayService.getEnd());
+                }
+
+            }
+
+        mTxtHours.setText(displayHours.toString());
+
         LayoutInflater li = LayoutInflater.from(getContext());
         mHscrollviewPhotos.removeAllViews();
         if (business.getPhotos() != null)
@@ -86,6 +105,20 @@ public class BusinessDetailView extends EntityView<Business> {
                 mHscrollviewPhotos.addView(imageView);
                 Glide.with(this).load(photo).into(imageView);
             }
+
+
+    }
+
+    private String getDay(int index) {
+
+        if (index == 0) return getResources().getString(R.string.sun);
+        else if (index == 1) return getResources().getString(R.string.mon);
+        else if (index == 2) return getResources().getString(R.string.tue);
+        else if (index == 3) return getResources().getString(R.string.wed);
+        else if (index == 4) return getResources().getString(R.string.thu);
+        else if (index == 5) return getResources().getString(R.string.fri);
+        else
+            return getResources().getString(R.string.sat);
     }
 
 

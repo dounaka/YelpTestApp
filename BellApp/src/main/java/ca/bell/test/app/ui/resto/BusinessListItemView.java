@@ -63,14 +63,13 @@ public class BusinessListItemView extends EntityView<Business> {
     protected void showEntity(Business business) {
         mtxtName.setText(business.getName());
         mTxtPrice.setText(business.getPrice());
-
-        mTxtDistance.setText(getKm(business.getDistance() / 1000));
+        if (business.getDistance() > 0)
+            mTxtDistance.setText(getKm(business.getDistance() / 1000));
+        else mTxtDistance.setText(null);
         Glide.with(this).load(business.getImageUrl()).into(mImgBusiness);
         mRatingBar.setRating(business.getRating());
         //TODO replace by a string resource with parameter
         mTxtReviewCount.setText("(" + business.getReviewCount() + ")");
-
-
     }
 
 

@@ -16,7 +16,7 @@
     <dimen name="text_size_medium">14sp</dimen>
     <dimen name="field_width">280dp</dimen>
 
-    <dimen name="resto_image_size">100dp</dimen>
+    <dimen name="resto_image_size">120dp</dimen>
     <dimen name="resto_photo_size">300dp</dimen>
     <integer name="nb_columns">1</integer>
 

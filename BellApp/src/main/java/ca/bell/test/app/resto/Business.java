@@ -282,5 +282,84 @@ public class Business extends Entity {
         }
     }
 
+    public static class DayService implements Serializable {
+        private int day;
+        private String start;
+        private String end;
+        private boolean isOvernight;
+
+        public int getDay() {
+            return day;
+        }
+
+        public void setDay(int day) {
+            this.day = day;
+        }
+
+        public String getStart() {
+            return start;
+        }
+
+        public void setStart(String start) {
+            this.start = start;
+        }
+
+        public String getEnd() {
+            return end;
+        }
+
+        public void setEnd(String end) {
+            this.end = end;
+        }
+
+        public boolean isOvernight() {
+            return isOvernight;
+        }
+
+        public void setOvernight(boolean overnight) {
+            isOvernight = overnight;
+        }
+    }
+
+    public WeekService[] getHours() {
+        return hours;
+    }
+
+    public void setHours(WeekService[] hours) {
+        this.hours = hours;
+    }
+
+    private WeekService[] hours;
+    public static class WeekService {
+        private boolean isOpenNow;
+        private String hoursType;
+        private DayService[] open;
+
+        public String getHoursType() {
+            return hoursType;
+        }
+
+        public void setHoursType(String hoursType) {
+            this.hoursType = hoursType;
+        }
+
+        public boolean isOpenNow() {
+            return isOpenNow;
+        }
+
+        public void setOpenNow(boolean openNow) {
+            isOpenNow = openNow;
+        }
+
+        public DayService[] getOpen() {
+            return open;
+        }
+
+        public void setOpen(DayService[] open) {
+            this.open = open;
+        }
+    }
+
+
 
 }

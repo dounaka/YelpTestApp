@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -103,13 +105,24 @@ public class RestoActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            view.clearFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
     private void showFavoriteFragment() {
+        hideKeyboard();
         if (detailView != null) detailView.setVisibility(View.GONE);
         FavoriteFragment fragment = new FavoriteFragment();
         getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private void showHistoryFragment() {
+        hideKeyboard();
         if (detailView != null) detailView.setVisibility(View.GONE);
         HistoryFragment fragment = new HistoryFragment();
         getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
@@ -139,7 +152,7 @@ public class RestoActivity extends AppCompatActivity {
             public void onSuccess(Location location) {
                 if (location != null) {
                     Search search = mSearchModel.getCurrentSearch().getValue();
-                    if (search.getLocation() != null) return;
+                    if (search == null || search.getLocation() != null) return;
                     search.setLat(location.getLatitude());
                     search.setLng(location.getLongitude());
                     Fragment fragment = getFragmentManager().findFragmentById(R.id.containerFragmentList);

@@ -3,12 +3,14 @@ package ca.bell.test.app.fragment;
 import android.app.Fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import ca.bell.test.app.R;
 import ca.bell.test.app.api.RestoApi;
@@ -97,6 +99,19 @@ public class SearchFragment extends Fragment implements SearchView.Listener {
         mSearchModel.getSelectedBusiness().setValue(null);
         runSearch(search);
     }
+
+
+    @Override
+    public void onPause() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            view.clearFocus();
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } mSearchView.onViewRemoved();
+        super.onPause();
+    }
+
 
 
     @Override

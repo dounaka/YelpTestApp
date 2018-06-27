@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Find Resto</string>
+
+    <string name="app_name">Hungry</string>
+
     <string name="into_msg01">Hungry ?</string>
     <string name="into_msg02">Find a resto now !</string>
     <string name="title_search">Search</string>
@@ -20,6 +22,17 @@
     <string name="sortByDistanceAsc">Sort by distance</string>
     <string name="sortByRatingAsc">Sort by rating</string>
     <string name="title_activity_business_detail">Restaurant</string>
+
+
+    <string name="close_now">Closed now</string>
+    <string name="open_now">Open now</string>
+    <string name="mon">Monday</string>
+    <string name="tue">Tuesday</string>
+    <string name="wed">Wednesday</string>
+    <string name="thu">Thursday</string>
+    <string name="fri">Friday</string>
+    <string name="sat">Saturday</string>
+    <string name="sun">Sunday</string>
 
 
 </resources>
