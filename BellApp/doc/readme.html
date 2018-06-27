@@ -41,7 +41,6 @@ h3{color:darkred;}
         Easy to use UI
     </li>
 
-
     <b>Detailed view of a result should include the following:</b>
 
     <li>Name and photo of business
@@ -58,7 +57,6 @@ h3{color:darkred;}
     </li>
 </ul>
 
-<hr/>
 <div>
     <ul>
         <li>
@@ -84,30 +82,101 @@ h3{color:darkred;}
         </li>
     </ul>
 </div>
-
+<hr/>
 <div>
-    <h2>Bonuses</h2>
-    <ul>
 
-        <li>Add material design style : put a theme that match the food industries - colors red and
-            light gray
-        </li>
+    <div style="border:2px solid darkred;margin:16px;padding:16px;">
+        Source code : <a target="repogithub" href="https://github.com/dounaka/bellinterview">Repo Github</a>
+    </div>
 
-        <li>Request location permission compatible before and after Android M</li>
-        <li>Use architecture component LiveData & View Model</li>
-        <li>Support Tablet with a Master/Detail model</li>
-        <li>By default show the results of current location if permission on location is allowed</li>
-    </ul>
+    <h2>App development - Extra work and explanations</h2>
 
+
+
+    <div>
+        <div> App "Hungry" shows the usage of</div>
+        <ul>
+            <li>Rest API Volley</li>
+            <li>Data load with pagination ( loading resto by page of 20)</li>
+            <li> Android Jetpack / architecture component : LiveData and ViewModel</li>
+            <li>Fragment / Activity in a master/detail display</li>
+            <li>Support Tablet with a Master/Detail model</li>
+            <li>Custom View : SearchView, BusinessDetailView...</li>
+            <li>Managing the permission to get User Location - Request location permission
+                compatible before and after Android M
+            </li>
+            <li> App with material design style : put a theme that match the food industries -
+                colors red and
+                light gray
+            </li>
+
+            <li>ViewModel with an activity lifecycle - allows communication between Activity &
+                Fragment using livedata and observer
+            </li>
+            <li>Pattern used : Factory, Singleton, ViewModel, Observer</li>
+        </ul>
+    </div>
 
     <h2>Missing or bugs ...</h2>
     <ul>
-
-        <li>Sorting by distance doesn't seem to work in the API - reference : <a href="https://github.com/Yelp/yelp-fusion/issues/29">github issue</a>
+        <li>Sorting by distance/rating doesn't seem to work using the API - reference : <a
+                href="https://github.com/Yelp/yelp-fusion/issues/29">github issue</a>
         </li>
         <li>Search by cuisine not implemented </li>
+        <li>Deals not implemented</li>
         <li>Bug on orientation change,  state of the view is not restored</li>
     </ul>
 </div>
+
+
+<div>
+    <h2>Tablet landscape - Demo 01</h2>
+
+    <ul>
+        <li>shows the usage of current location when user give permission to access the location</li>
+        <li>display local resto, better than starting on an empty list of resto</li>
+        <li>download the list of restos with a pagination of 20 - reload when at the end of the list</li>
+        <li>change the location with "Verdun" to override the current user location </li>
+        <li>run the search after 3s of inaction in the criteria</li>
+        <li>Open the resto detail in the same screen, on the side (master/detail)</li>
+        <li>when changing a criteria (or sort) in the search close the detail and refresh the entire list</li>
+    </ul>
+    <video width="320" height="240" controls>
+        <source src="https://static.restominute.ca/video/hungry-tablet.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<div>
+
+    <h2>Tablet portrait- Demo 02</h2>
+    <ul>
+        <li>Change the tablet orientation</li>
+        <li>Open the detail at the bottom of the screen (it is on the right for landscape mode)</li>
+        <li>Changing the sort reload the list ( complete new search)</li>
+        <li>The list of resto is displayed on twos columns for a large screen portrait or landscape</li>
+    </ul>
+    <video width="320" height="240" controls>
+        <source src="https://static.restominute.ca/video/hyngry-tablet-portrait.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+
+<div>
+    <h2>Phone - Demo 03</h2>
+    <ul>
+        <li>The list of resto is displayed on one column for smaller screen</li>
+        <li>Open the detail in a new Activity</li>
+    </ul>
+    <video width="320" height="240" controls>
+        <source src="https://static.restominute.ca/video/hungry-phone.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+
+
+
 </body>
 </html>

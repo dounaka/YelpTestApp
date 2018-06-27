@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/space_small" android:layout_gravity="center"
-        android:text="history fragment"
+        android:text="Show the history of search - in progress"
         android:textColor="@color/colorPrimary" />
 
 
