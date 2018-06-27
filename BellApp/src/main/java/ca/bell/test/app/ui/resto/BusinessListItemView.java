@@ -65,7 +65,7 @@ public class BusinessListItemView extends EntityView<Business> {
         mTxtPrice.setText(business.getPrice());
         if (business.getDistance() > 0)
             mTxtDistance.setText(getKm(business.getDistance() / 1000));
-        else mTxtDistance.setText(null);
+
         Glide.with(this).load(business.getImageUrl()).into(mImgBusiness);
         mRatingBar.setRating(business.getRating());
         //TODO replace by a string resource with parameter

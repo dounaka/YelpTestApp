@@ -71,7 +71,7 @@ public class BusinessFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
 
-        Business business = (Business) getArguments().getSerializable(KEY_BUSINESS);
+        final Business business = (Business) getArguments().getSerializable(KEY_BUSINESS);
         businessDetailView.show(business);
 
         RestoFactory.getRestoApi(getActivity()).getDetail(business.getId(), new RestoApi.SearchResponse<Business>() {
@@ -82,6 +82,7 @@ public class BusinessFragment extends android.support.v4.app.Fragment {
 
             @Override
             public void onSuccess(Business businessResult) {
+                businessResult.setDistance(business.getDistance());
                 mBusinessModel.getBusiness().setValue(businessResult);
             }
         });
