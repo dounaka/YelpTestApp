@@ -47,7 +47,7 @@ import ca.bell.test.app.resto.Business;
  */
 public class RestoActivity extends AppCompatActivity {
     SearchViewModel mSearchModel;
-
+    ViewGroup detailView;
 
 
     @Override
@@ -63,6 +63,8 @@ public class RestoActivity extends AppCompatActivity {
         mSearchModel.getSelectedBusiness().observe(this, searchObserver);
 
         setContentView(R.layout.activity_start);
+
+        detailView = findViewById(R.id.containerFragmentDetail);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -82,7 +84,7 @@ public class RestoActivity extends AppCompatActivity {
     }
 
     private void show(Business business) {
-        ViewGroup detailView = findViewById(R.id.containerFragmentDetail);
+
         if (detailView == null) Toast.makeText(this, "open new activity", Toast.LENGTH_LONG).show();
         else
             detailView.setVisibility(View.VISIBLE); // and replace with detail fragment !!
@@ -91,19 +93,19 @@ public class RestoActivity extends AppCompatActivity {
 
     private void showSearchFragment() {
         SearchFragment fragment = new SearchFragment();
-        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private void showFavoriteFragment() {
-
-
+        if (detailView != null) detailView.setVisibility(View.GONE);
         FavoriteFragment fragment = new FavoriteFragment();
-        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private void showHistoryFragment() {
+        if (detailView != null) detailView.setVisibility(View.GONE);
         HistoryFragment fragment = new HistoryFragment();
-        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private FusedLocationProviderClient mFusedLocationClient;

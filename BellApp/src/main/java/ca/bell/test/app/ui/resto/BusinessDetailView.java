@@ -29,12 +29,12 @@ import ca.bell.test.app.ui.EntityView;
     http://www.gnu.org/licenses/gpl.html
  */
 
-public class BusinessListItemView extends EntityView<Business> {
+public class BusinessDetailView extends EntityView<Business> {
     private ImageView mImgBusiness;
     private RatingBar mRatingBar;
     private TextView mtxtName, mTxtPrice, mTxtDistance;
 
-    public BusinessListItemView(Context ctx) {
+    public BusinessDetailView(Context ctx) {
         super(ctx);
     }
 

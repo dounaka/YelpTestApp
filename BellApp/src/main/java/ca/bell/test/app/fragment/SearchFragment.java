@@ -1,11 +1,9 @@
 package ca.bell.test.app.fragment;
 
-import android.app.Fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,26 +32,32 @@ import ca.bell.test.app.ui.resto.SearchView;
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     http://www.gnu.org/licenses/gpl.html
  */
-public class SearchFragment extends Fragment implements SearchView.Listener {
+public class SearchFragment extends android.support.v4.app.Fragment implements SearchView.Listener {
 
     private SearchViewModel mSearchModel;
 
     private SearchView mSearchView;
+    private Observer<Search> searchObserver;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSearchModel = ViewModelProviders.of((AppCompatActivity) getActivity()).get(SearchViewModel.class);
-        final Observer<Search> searchObserver = new Observer<Search>() {
+        mSearchModel = ViewModelProviders.of(getActivity()).get(SearchViewModel.class);
+        searchObserver = new Observer<Search>() {
             @Override
             public void onChanged(@Nullable Search search) {
                 if (mSearchView != null) {
                     mSearchView.show(search);
-
                 }
             }
         };
-        mSearchModel.getCurrentSearch().observe((AppCompatActivity) getActivity(), searchObserver);
+        mSearchModel.getCurrentSearch().observe(getActivity(), searchObserver);
+    }
+
+    @Override
+    public void onDestroy() {
+        mSearchModel.getCurrentSearch().removeObserver(searchObserver);
+        super.onDestroy();
     }
 
     @Override

@@ -46,7 +46,7 @@ public class YelpApi implements RestoApi {
 
 
     private YelpApi(Context context) {
-        mCtx = context;
+        mCtx = context.getApplicationContext();
         mRequestQueue = getRequestQueue();
     }
 

@@ -26,11 +26,10 @@ import ca.bell.test.app.R;
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     http://www.gnu.org/licenses/gpl.html
  */
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
         View mainView = inflater.inflate(R.layout.fragment_favorite, container, false);
         return mainView;
     }
