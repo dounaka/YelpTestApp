@@ -96,19 +96,24 @@ public class SearchFragment extends Fragment implements SearchView.Listener {
 
     @Override
     public void onNewSearch(final Search search) {
+        hidekeyboard();
         mSearchModel.getSelectedBusiness().setValue(null);
         runSearch(search);
     }
 
 
-    @Override
-    public void onPause() {
+    private void hidekeyboard() {
         View view = getActivity().getCurrentFocus();
         if (view != null) {
             view.clearFocus();
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        } mSearchView.onViewRemoved();
+        }
+    }
+    @Override
+    public void onPause() {
+        hidekeyboard();
+        mSearchView.onViewRemoved();
         super.onPause();
     }
 
@@ -116,6 +121,7 @@ public class SearchFragment extends Fragment implements SearchView.Listener {
 
     @Override
     public void onDisplayEndOfList(final Search search) {
+        hidekeyboard();
         runSearch(search);
     }
 
