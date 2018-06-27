@@ -1,10 +1,14 @@
 package ca.bell.test.app.fragment;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import android.app.Fragment;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import ca.bell.test.app.resto.Business;
-import ca.bell.test.app.resto.Search;
+import ca.bell.test.app.R;
+
 /*
  *  Android library
     Copyright (C) 2018 Icati inc. - Canada
@@ -23,19 +27,12 @@ import ca.bell.test.app.resto.Search;
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     http://www.gnu.org/licenses/gpl.html
  */
-public class SearchViewModel extends ViewModel{
+public class BusinessFragment extends Fragment {
 
-    private MutableLiveData<Search> mSearch;
-    private MutableLiveData<Business> mSelectedBusiness;
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-
-    public MutableLiveData<Search> getCurrentSearch()  {
-        if (mSearch ==null) mSearch = new MutableLiveData<>();
-        return mSearch;
-    }
-
-    public MutableLiveData<Business> getSelectedBusiness()  {
-        if (mSelectedBusiness ==null) mSelectedBusiness = new MutableLiveData<>();
-        return mSelectedBusiness;
+        View mainView = inflater.inflate(R.layout.fragment_favorite, container, false);
+        return mainView;
     }
 }

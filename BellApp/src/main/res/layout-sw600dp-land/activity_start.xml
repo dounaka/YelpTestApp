@@ -16,14 +16,27 @@
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
 
-    <FrameLayout
-        android:id="@+id/containerFragmentList"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/navigation">
+        android:layout_above="@id/navigation"
+        android:animateLayoutChanges="true"
+        android:orientation="horizontal">
 
+        <FrameLayout
+            android:id="@+id/containerFragmentList"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/containerFragmentDetail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_box"
+            android:visibility="gone" />
+    </LinearLayout>
 
 
 </RelativeLayout>

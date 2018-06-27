@@ -2,16 +2,15 @@ package ca.bell.test.app.ui.resto;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.PopupMenu;
 
 import ca.bell.test.app.R;
 import ca.bell.test.app.resto.Business;
@@ -36,11 +35,13 @@ import ca.bell.test.app.ui.EntityView;
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     http://www.gnu.org/licenses/gpl.html
  */
-public class SearchView extends EntityView<Search> implements View.OnClickListener {
+public class SearchView extends EntityView<Search> implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
     private EntityAdapter<Business> mAdapterBusiness;
 
     private AppCompatEditText mEditSearchBusiness, mEditSearchLocation;
+
+    private AppCompatTextView mTxtSortBy, mTxtResults;
 
     public SearchView(Context ctx) {
         super(ctx);
@@ -58,11 +59,12 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
 
     @Override
     public void bindControls(Context ctx) {
-
+        mTxtSortBy = findViewById(R.id.txtSortBy);
+        mTxtResults = findViewById(R.id.txtResults);
         mEditSearchBusiness = findViewById(R.id.editSearchBusiness);
         mEditSearchLocation = findViewById(R.id.editSearchLocation);
 
-        mEditSearchBusiness.addTextChangedListener(new TextWatcher() {
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -75,42 +77,41 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
             public void afterTextChanged(Editable s) {
                 onNewSearch();
             }
-        });
-        mEditSearchLocation.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        };
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+        mEditSearchBusiness.addTextChangedListener(textWatcher);
+        mEditSearchLocation.addTextChangedListener(textWatcher);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                onNewSearch();
-            }
-        });
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewBusiness);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), getResources().getInteger(R.integer.nb_columns));
+        recyclerView.setLayoutManager(gridLayoutManager);
         mAdapterBusiness = new EntityAdapter<Business>() {
             @Override
             protected EntityView<Business> createEntityView(Context ctx) {
                 BusinessListItemView view = new BusinessListItemView(ctx);
                 view.setOnClickListener(SearchView.this);
-                view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 return view;
             }
         };
+        mAdapterBusiness.listener = new EntityAdapter.Listener() {
+            @Override
+            public void onEndOfList() {
+                listener.onDisplayEndOfList(SearchView.this.entity);
+            }
+        };
         recyclerView.setAdapter(mAdapterBusiness);
-        AppCompatSpinner spinner = findViewById(R.id.spinnerSort);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.businessSortBy, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        mTxtSortBy.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getContext(), mTxtSortBy);
+                popup.getMenuInflater().inflate(R.menu.menu_sort, popup.getMenu());
+                popup.setOnMenuItemClickListener(SearchView.this);
+                popup.show();
+            }
+        });
+
     }
 
     boolean ignoreChange = true;
@@ -120,6 +121,7 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
         if (entity == null) entity = new Search();
         else
             clearResults();
+        mTxtResults.setText(null);
         this.entity.setQuery(mEditSearchBusiness.getText().toString());
         this.entity.setLocation(mEditSearchLocation.getText().toString());
         tryRun();
@@ -134,7 +136,6 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
         actionToRun = new Runnable() {
             @Override
             public void run() {
-
                 listener.onNewSearch(getEntity());
             }
         };
@@ -147,17 +148,29 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
         mAdapterBusiness.notifyDataSetChanged();
     }
 
-
+    @Override
+    public void show(Search search) {
+        if (this.entity != null && this.entity.getBusinesses().size() > 0)
+            search.getBusinesses().addAll(0, this.entity.getBusinesses());
+        this.entity = search;
+        showEntity(this.entity);
+    }
 
     @Override
     protected void showEntity(Search search) {
-        ignoreChange = true;
-        mEditSearchBusiness.setText(entity.getQuery());
-        mEditSearchLocation.setText(entity.getLocation());
-        search.sortByDistance(true);
+        ignoreChange = true; // disable textWatcher
+        final int total = search.getBusinesses().size();
+        if (total != 0)
+            mTxtResults.setText("x" + total);
+        mEditSearchBusiness.setText(search.getQuery());
+        mEditSearchLocation.setText(search.getLocation());
+        // search.sortByDistance(true);
         mAdapterBusiness.setEntities(search.getBusinesses());
         mAdapterBusiness.notifyDataSetChanged();
+        mTxtSortBy.setText(search.isSortByDistance() ? R.string.sortByDistanceAsc : R.string.sortByRatingAsc);
         ignoreChange = false;
+
+
     }
 
     @Override
@@ -175,5 +188,20 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
         void onNewSearch(Search search);
 
         void onClick(Business business);
+
+        void onDisplayEndOfList(Search search);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.sortByDistanceAsc) {
+            this.entity.setSortByDistance();
+            mTxtSortBy.setText(R.string.sortByDistanceAsc);
+        } else if (item.getItemId() == R.id.sortByRatingAsc) {
+            this.entity.setSortByRating();
+            mTxtSortBy.setText(R.string.sortByRatingAsc);
+        }
+        onNewSearch(); // because of pagination, changing sort requires a complete change of the list
+        return true;
     }
 }

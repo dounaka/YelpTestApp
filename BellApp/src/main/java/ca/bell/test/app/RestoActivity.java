@@ -1,15 +1,19 @@
 package ca.bell.test.app;
 
 import android.Manifest;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.SearchView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -19,8 +23,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import ca.bell.test.app.fragment.FavoriteFragment;
 import ca.bell.test.app.fragment.HistoryFragment;
 import ca.bell.test.app.fragment.SearchFragment;
+import ca.bell.test.app.fragment.SearchViewModel;
 import ca.bell.test.app.permission.LocationPermission;
 import ca.bell.test.app.resto.Business;
+
 /*
  *  Android library
     Copyright (C) 2018 Icati inc. - Canada
@@ -40,31 +46,22 @@ import ca.bell.test.app.resto.Business;
     http://www.gnu.org/licenses/gpl.html
  */
 public class RestoActivity extends AppCompatActivity {
+    SearchViewModel mSearchModel;
 
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_search:
-                    showSearchFragment();
-                    return true;
-                case R.id.navigation_favorite:
-                    showFavoriteFragment();
-                    return true;
-                case R.id.navigation_history:
-                    showHistoryFragment();
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSearchModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+        final Observer<Business> searchObserver = new Observer<Business>() {
+            @Override
+            public void onChanged(@Nullable Business business) {
+                show(business);
+            }
+        };
+        mSearchModel.getSelectedBusiness().observe(this, searchObserver);
+
         setContentView(R.layout.activity_start);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -84,19 +81,29 @@ public class RestoActivity extends AppCompatActivity {
 
     }
 
+    private void show(Business business) {
+        ViewGroup detailView = findViewById(R.id.containerFragmentDetail);
+        if (detailView == null) Toast.makeText(this, "open new activity", Toast.LENGTH_LONG).show();
+        else
+            detailView.setVisibility(View.VISIBLE); // and replace with detail fragment !!
+
+    }
+
     private void showSearchFragment() {
         SearchFragment fragment = new SearchFragment();
-        getFragmentManager().beginTransaction().replace(R.id.containerFragment, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private void showFavoriteFragment() {
+
+
         FavoriteFragment fragment = new FavoriteFragment();
-        getFragmentManager().beginTransaction().replace(R.id.containerFragment, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private void showHistoryFragment() {
         HistoryFragment fragment = new HistoryFragment();
-        getFragmentManager().beginTransaction().replace(R.id.containerFragment, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private FusedLocationProviderClient mFusedLocationClient;
@@ -140,6 +147,27 @@ public class RestoActivity extends AppCompatActivity {
             mFusedLocationClient.getLastLocation().addOnSuccessListener(this, successListener);
         } else mFusedLocationClient.getLastLocation().addOnSuccessListener(this, successListener);
     }
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_search:
+                    showSearchFragment();
+                    return true;
+                case R.id.navigation_favorite:
+                    showFavoriteFragment();
+                    return true;
+                case R.id.navigation_history:
+                    showHistoryFragment();
+                    return true;
+            }
+            return false;
+        }
+    };
 
 
 }

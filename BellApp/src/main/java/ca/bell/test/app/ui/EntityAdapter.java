@@ -56,7 +56,6 @@ public abstract class EntityAdapter<E extends Entity> extends RecyclerView.Adapt
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder vh = new ViewHolder(createEntityView(parent.getContext()));
-
         return vh;
     }
 
@@ -64,6 +63,9 @@ public abstract class EntityAdapter<E extends Entity> extends RecyclerView.Adapt
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.entityView.show(entities.get(position));
+
+        if (listener != null && (entities.size() - position) == 3) listener.onEndOfList();
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -78,6 +80,12 @@ public abstract class EntityAdapter<E extends Entity> extends RecyclerView.Adapt
         this.entities.addAll(entties);
     }
 
+
+    public Listener listener;
+
+    public interface Listener {
+        void onEndOfList();
+    }
 
 }
 

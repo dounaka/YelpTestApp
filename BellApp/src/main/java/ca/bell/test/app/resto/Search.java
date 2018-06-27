@@ -32,6 +32,10 @@ public class Search extends Entity {
     private double lng = -1;
     private ArrayList<Business> businesses = new ArrayList<>();
 
+    public static final int LIMIT = 20;
+
+    private int offset;
+
 
     @Override
     String getId() {
@@ -50,6 +54,7 @@ public class Search extends Entity {
 
     public void setQuery(String query) {
         this.query = query;
+        this.offset = 0;
     }
 
     public String getLocation() {
@@ -58,6 +63,7 @@ public class Search extends Entity {
 
     public void setLocation(String location) {
         this.location = location;
+        this.offset = 0;
     }
 
     public double getLat() {
@@ -84,17 +90,30 @@ public class Search extends Entity {
         this.businesses = businesses;
     }
 
-    public void sortByDistance(boolean asc) {
-        distanceSort.ascendant = asc;
-        Collections.sort(businesses, distanceSort);
+
+    private short sortBy = SORT_BY_DISTANCE;
+    private static final int SORT_BY_DISTANCE = 1;
+    private static final int SORT_BY_RATING = 2;
+
+    public boolean isSortByDistance() {
+        return sortBy == SORT_BY_DISTANCE;
     }
 
-    public void sortByRating(boolean asc) {
-        ratingSort.ascendant = asc;
-        Collections.sort(businesses, ratingSort);
+    public boolean isSortByRating() {
+        return sortBy == SORT_BY_RATING;
     }
 
-    PlaceComparator distanceSort = new PlaceComparator() {
+    public void setSortByDistance() {
+        sortBy = SORT_BY_DISTANCE;
+    }
+
+    public void setSortByRating() {
+        sortBy = SORT_BY_RATING;
+    }
+
+
+
+    private PlaceComparator distanceSort = new PlaceComparator() {
         @Override
         float getValue(Business b) {
             return b.getDistance();
@@ -109,4 +128,29 @@ public class Search extends Entity {
     };
 
 
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+
+    public short getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(short sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public void mapQuery(Search anotherSearch) {
+        this.sortBy = anotherSearch.sortBy;
+        this.query = anotherSearch.query;
+        this.location = anotherSearch.location;
+        this.lat = anotherSearch.lat;
+        this.lng = anotherSearch.lng;
+        this.offset = anotherSearch.offset;
+    }
 }

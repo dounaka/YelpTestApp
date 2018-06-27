@@ -39,8 +39,8 @@ import ca.bell.test.app.resto.Search;
 public class YelpApi implements RestoApi {
     private static YelpApi mInstance;
     private RequestQueue mRequestQueue;
-    private static Context mCtx;
-    private static Cache mCache;
+    private Context mCtx;
+    private Cache mCache;
 
     private static final String TAG = "YELP_API";
 
@@ -72,18 +72,26 @@ public class YelpApi implements RestoApi {
 
 
     public void request(final Search search, final SearchResponse searchResponse) {
-        StringBuilder urlSearch = new StringBuilder("https://api.yelp.com/v3/businesses/search?");
+        StringBuilder urlSearch = new StringBuilder("https://api.yelp.com/v3/businesses/search?categories=restaurants&");
 
-        final Map<String, String> params = new HashMap<>();
-        if (search.getQuery() != null)
-            urlSearch.append("term=" + search.getQuery());
-        if (search.getLocation() != null)
+        if (search.isSortByDistance())
+            urlSearch.append("&sort_by=distance");
+        else if (search.isSortByRating())
+            urlSearch.append("&sort_by=rating");
+
+        urlSearch.append("&offset=" + search.getOffset());
+        urlSearch.append("&limit=" + Search.LIMIT);
+
+        if (search.getQuery() != null) {
+            urlSearch.append("&term=" + search.getQuery());
+        }
+        if (search.getLocation() != null) {
             urlSearch.append( "&location=" + search.getLocation());
+        }
         else  {
             urlSearch.append( "&latitude=" + search.getLat());
             urlSearch.append("&longitude=" + search.getLng());
         }
-
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + BuildConfig.API_KEY);
@@ -92,10 +100,8 @@ public class YelpApi implements RestoApi {
         final Response.Listener<Search> responseSearch = new Response.Listener<Search>() {
             @Override
             public void onResponse(Search response) {
-                response.setQuery(search.getQuery());
-                response.setLocation(search.getLocation());
-                response.setLat(search.getLat());
-                response.setLng(search.getLng());
+                response.mapQuery(search);
+                response.setOffset(search.getOffset() + Search.LIMIT);
                 searchResponse.onSuccess(response);
             }
         };

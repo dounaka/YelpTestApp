@@ -8,33 +8,55 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/space_medium"
-        android:background="#22f05545"
+        android:background="#33999999"
         android:orientation="vertical"
-        android:padding="@dimen/space_small">
+        android:padding="@dimen/space_medium">
 
-        <android.support.v7.widget.AppCompatEditText android:id="@+id/editSearchBusiness"
-            android:layout_width="match_parent"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/text_size_medium"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/search_business_hint" />
+            android:text="@string/search_resto"
+            android:textSize="@dimen/text_size_big"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/editSearchLocation"
-            android:textColor="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:textSize="@dimen/text_size_medium"
+            android:layout_width="@dimen/field_width"
             android:layout_height="wrap_content"
-            android:hint="@string/search_location_hint" />
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spinnerSort"
-            style="@style/Widget.AppCompat.Spinner.Underlined"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
+            android:focusedByDefault="false"
+            android:hint="@string/search_location_hint"
             android:textSize="@dimen/text_size_medium" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/editSearchBusiness"
+            android:layout_width="@dimen/field_width"
+            android:textSize="@dimen/text_size_medium"
+            android:focusedByDefault="false"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_business_hint" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/txtSortBy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/space_small"
+                android:text="@string/sortByDistanceAsc" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/txtResults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/space_small"
+                android:textSize="@dimen/text_size_big" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

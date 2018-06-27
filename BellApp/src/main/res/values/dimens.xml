@@ -14,5 +14,11 @@
     <dimen name="text_size_giant">36sp</dimen>
     <dimen name="text_size_big">18sp</dimen>
     <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="field_width">280dp</dimen>
 
+    <dimen name="resto_image_size">140dp</dimen>
+    <integer name="nb_columns">1</integer>
+
+
+    <integer name="layout_orientation">1</integer>
 </resources>

@@ -47,11 +47,13 @@ public class SearchFragment extends Fragment implements SearchView.Listener {
         final Observer<Search> searchObserver = new Observer<Search>() {
             @Override
             public void onChanged(@Nullable Search search) {
-                if (mSearchView != null)
+                if (mSearchView != null) {
                     mSearchView.show(search);
+
+                }
             }
         };
-        mSearchModel.getViewModel().observe((AppCompatActivity) getActivity(), searchObserver);
+        mSearchModel.getCurrentSearch().observe((AppCompatActivity) getActivity(), searchObserver);
     }
 
     @Override
@@ -65,20 +67,30 @@ public class SearchFragment extends Fragment implements SearchView.Listener {
 
     @Override
     public void onClick(Business business) {
-
+        mSearchModel.getSelectedBusiness().setValue(business);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (mSearchModel.getViewModel().getValue() == null)
-            mSearchModel.getViewModel().setValue(new Search());
+        if (mSearchModel.getCurrentSearch().getValue() == null)
+            mSearchModel.getCurrentSearch().setValue(new Search());
         else
-            mSearchView.show(mSearchModel.getViewModel().getValue());
+            mSearchView.show(mSearchModel.getCurrentSearch().getValue());
     }
 
     @Override
     public void onNewSearch(final Search search) {
+        runSearch(search);
+    }
+
+
+    @Override
+    public void onDisplayEndOfList(final Search search) {
+        runSearch(search);
+    }
+
+    private void runSearch(Search search) {
 
         RestoFactory.getRestoApi(getActivity()).search(search, new RestoApi.SearchResponse() {
             @Override
@@ -87,13 +99,9 @@ public class SearchFragment extends Fragment implements SearchView.Listener {
 
             @Override
             public void onSuccess(Search searchResult) {
-                mSearchModel.getViewModel().setValue(searchResult);
+                mSearchModel.getCurrentSearch().setValue(searchResult);
             }
         });
-
     }
 
-    public void setNewPosition(double lat, double lng) {
-
-    }
 }
