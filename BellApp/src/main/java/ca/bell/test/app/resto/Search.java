@@ -38,7 +38,7 @@ public class Search extends Entity {
 
 
     @Override
-    String getId() {
+    public String getId() {
         return getQuery() + SEP + getLocation() + SEP + getLat() + SEP + getLng();
     }
 
@@ -145,12 +145,13 @@ public class Search extends Entity {
         this.sortBy = sortBy;
     }
 
-    public void mapQuery(Search anotherSearch) {
+    public void syncPagingSearch(Search anotherSearch) {
+        this.offset = anotherSearch.getOffset() + Search.LIMIT;
         this.sortBy = anotherSearch.sortBy;
         this.query = anotherSearch.query;
         this.location = anotherSearch.location;
         this.lat = anotherSearch.lat;
         this.lng = anotherSearch.lng;
-        this.offset = anotherSearch.offset;
+        this.businesses.addAll(0, anotherSearch.getBusinesses());
     }
 }

@@ -1,5 +1,6 @@
 package ca.bell.test.app.api;
 
+import ca.bell.test.app.resto.Business;
 import ca.bell.test.app.resto.Search;
 
 
@@ -29,11 +30,13 @@ import ca.bell.test.app.resto.Search;
 
 public interface RestoApi {
 
-    void search(Search search, SearchResponse response);
+    void search(Search search, SearchResponse<Search> response);
 
-    interface SearchResponse {
+    void getDetail(String restoid, SearchResponse<Business> response);
+
+    interface SearchResponse<T> {
         void onError(Exception ex);
-        void onSuccess(Search search);
+        void onSuccess(T search);
     }
 
 }

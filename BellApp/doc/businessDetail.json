@@ -1,0 +1,95 @@
+{
+  "id": "J6qWt6XIUmIGFHX5rQJA-w",
+  "alias": "l-avenue-montr\u00e9al",
+  "name": "L'Avenue",
+  "image_url": "https://s3-media4.fl.yelpcdn.com/bphoto/1D53JOLN_pPn9tmStXLknQ/o.jpg",
+  "is_claimed": true,
+  "is_closed": false,
+  "url": "https://www.yelp.com/biz/l-avenue-montr%C3%A9al?adjust_creative=Tm5hNcHSX1sXJbB7QeMndQ&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=Tm5hNcHSX1sXJbB7QeMndQ",
+  "phone": "+15145238780",
+  "display_phone": "+1 514-523-8780",
+  "review_count": 901,
+  "categories": [
+    {
+      "alias": "breakfast_brunch",
+      "title": "Breakfast & Brunch"
+    }
+  ],
+  "rating": 4.5,
+  "location": {
+    "address1": "922 Avenue du Mont-Royal E",
+    "address2": "",
+    "address3": "",
+    "city": "Montreal",
+    "zip_code": "H2J 1X2",
+    "country": "CA",
+    "state": "QC",
+    "display_address": [
+      "922 Avenue du Mont-Royal E",
+      "Montreal, QC H2J 1X2",
+      "Canada"
+    ],
+    "cross_streets": ""
+  },
+  "coordinates": {
+    "latitude": 45.5266781712886,
+    "longitude": -73.5802391312828
+  },
+  "photos": [
+    "https://s3-media4.fl.yelpcdn.com/bphoto/1D53JOLN_pPn9tmStXLknQ/o.jpg",
+    "https://s3-media3.fl.yelpcdn.com/bphoto/KhS9L-LOD0c6O486NyuSsQ/o.jpg",
+    "https://s3-media4.fl.yelpcdn.com/bphoto/mYQwAdhBOARBg59RPOMJTg/o.jpg"
+  ],
+  "price": "$$",
+  "hours": [
+    {
+      "open": [
+        {
+          "is_overnight": false,
+          "start": "0800",
+          "end": "1600",
+          "day": 0
+        },
+        {
+          "is_overnight": false,
+          "start": "0800",
+          "end": "1600",
+          "day": 1
+        },
+        {
+          "is_overnight": false,
+          "start": "0800",
+          "end": "1600",
+          "day": 2
+        },
+        {
+          "is_overnight": false,
+          "start": "0800",
+          "end": "1600",
+          "day": 3
+        },
+        {
+          "is_overnight": false,
+          "start": "0800",
+          "end": "1600",
+          "day": 4
+        },
+        {
+          "is_overnight": false,
+          "start": "0800",
+          "end": "1600",
+          "day": 5
+        },
+        {
+          "is_overnight": false,
+          "start": "0800",
+          "end": "1600",
+          "day": 6
+        }
+      ],
+      "hours_type": "REGULAR",
+      "is_open_now": false
+    }
+  ],
+  "transactions": []
+}

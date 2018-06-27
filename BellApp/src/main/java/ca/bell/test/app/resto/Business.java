@@ -1,5 +1,6 @@
 package ca.bell.test.app.resto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 /*
  *  Android library
@@ -21,7 +22,7 @@ import java.util.ArrayList;
  */
 public class Business extends Entity {
     @Override
-    String getId() {
+    public String getId() {
         return id;
     }
 
@@ -29,16 +30,21 @@ public class Business extends Entity {
     private String name;
     private String url;
     private String imageUrl;
-    private String phone;
-    private String displayPhone;
+    private float distance;
     private String price;
-
+    private float rating;
     private int reviewCount;
 
-    private float distance;
-    private float rating;
-
+    private String phone;
+    private String displayPhone;
     private boolean isClosed;
+    private Location location;
+    private ArrayList<Categ> categories = new ArrayList<>();
+    private Coordinate coordinates;
+
+    private String[] photos;
+
+
 
 
     public void setId(String id) {
@@ -150,7 +156,15 @@ public class Business extends Entity {
         this.location = location;
     }
 
-    public static class Categ {
+    public String[] getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String[] photos) {
+        this.photos = photos;
+    }
+
+    public static class Categ implements Serializable {
         private String alias;
         private String title;
 
@@ -171,7 +185,7 @@ public class Business extends Entity {
         }
     }
 
-    public static class Coordinate {
+    public static class Coordinate implements Serializable {
         private float latitude;
         private float longitude;
 
@@ -192,7 +206,7 @@ public class Business extends Entity {
         }
     }
 
-    public static class Location {
+    public static class Location implements Serializable {
         private String address1;
         private String address2;
         private String address3;
@@ -268,7 +282,5 @@ public class Business extends Entity {
         }
     }
 
-    private Location location;
-    private ArrayList<Categ> categories = new ArrayList<>();
-    private Coordinate coordinates;
+
 }

@@ -35,7 +35,6 @@
             android:layout_height="wrap_content"
             android:hint="@string/search_business_hint" />
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,8 +43,8 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/txtSortBy"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/space_small"
+                android:layout_height="wrap_content" android:background="@drawable/bg_box"
+                android:padding="@dimen/space_small" android:layout_marginRight="@dimen/space_medium"
                 android:text="@string/sortByDistanceAsc" />
 
             <android.support.v7.widget.AppCompatTextView

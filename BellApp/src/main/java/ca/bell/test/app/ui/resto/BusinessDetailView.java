@@ -1,8 +1,12 @@
 package ca.bell.test.app.ui.resto;
 
 import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.RatingBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,66 +34,58 @@ import ca.bell.test.app.ui.EntityView;
  */
 
 public class BusinessDetailView extends EntityView<Business> {
-    private ImageView mImgBusiness;
-    private RatingBar mRatingBar;
-    private TextView mtxtName, mTxtPrice, mTxtDistance;
 
     public BusinessDetailView(Context ctx) {
         super(ctx);
     }
 
+    public BusinessDetailView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    private BusinessListItemView mViewBusinessItem;
+    private LinearLayout mHscrollviewPhotos;
+    private TextView mTxtPhone, mTxtAddress, mTxtCategs;
     @Override
     public int getViewResourceId() {
-        return R.layout.view_business_list_item;
+        return R.layout.view_business_detail;
     }
 
     @Override
     public void bindControls(Context ctx) {
-        mImgBusiness = findViewById(R.id.imgBusiness);
-        mRatingBar = findViewById(R.id.ratingBarBusiness);
-        mtxtName = findViewById(R.id.txtName);
-        mTxtPrice = findViewById(R.id.txtPrice);
-        mTxtDistance = findViewById(R.id.txtDistance);
+        mHscrollviewPhotos = findViewById(R.id.hscrollviewPhotos);
+        mTxtAddress = findViewById(R.id.txtAddress);
+        mTxtPhone = findViewById(R.id.txtPhone);
+        mTxtCategs = findViewById(R.id.txtCategs);
+        mViewBusinessItem = findViewById(R.id.viewBusinessItem);
+        mViewBusinessItem.setFlatView();
     }
 
     @Override
     protected void showEntity(Business business) {
-        mtxtName.setText(business.getName());
-        mTxtPrice.setText(business.getPrice());
-//        StringBuilder displayAddress = new StringBuilder();
-//        boolean first = true;
-//        for (String address : business.getLocation().getDisplayAddress()) {
-//            displayAddress.append((first ? "" : "\n") + address);
-//            first = false;
-//        }
-//        mTxtPhone.setText(business.getDisplayPhone());
-//        mTxtAddress.setText(displayAddress.toString());
-        mTxtDistance.setText(getKm(business.getDistance() / 1000));
-        Glide.with(this).load(business.getImageUrl()).into(mImgBusiness);
-        mRatingBar.setRating(business.getRating());
-
-    }
-
-
-    public static String getKm(float km) {
-        final String doubleZero = "00";
-        final String unit;
-        final String dot = ".";
-        final int indexSubstring;
-        String distance = null;
-        if (km < 1) {
-            unit = " m";
-            if (km == 0)
-                return (0 + unit);
-            indexSubstring = 0;
-            distance = String.valueOf((int) (km * 1000));
-        } else {
-            unit = " km";
-            indexSubstring = 3;
-            distance = km + doubleZero;
+        mViewBusinessItem.showEntity(business);
+        StringBuilder displayAddress = new StringBuilder();
+        boolean first = true;
+        for (String address : business.getLocation().getDisplayAddress()) {
+            displayAddress.append((first ? "" : "\n") + address);
+            first = false;
         }
-        final int dotIndex = distance.indexOf(".") + indexSubstring;
-        return (dotIndex == -1 ? distance + unit : distance.substring(0, dotIndex) + unit);
+        mTxtPhone.setText(business.getDisplayPhone());
+        mTxtAddress.setText(displayAddress.toString());
+        StringBuilder displayCategs = new StringBuilder();
+        for (Business.Categ categ : business.getCategories())
+            displayCategs.append("\n" + categ.getTitle());
+        mTxtCategs.setText(displayCategs.toString());
+
+
+        LayoutInflater li = LayoutInflater.from(getContext());
+        mHscrollviewPhotos.removeAllViews();
+        if (business.getPhotos() != null)
+            for (String photo : business.getPhotos()) {
+                ImageView imageView = (ImageView) li.inflate(R.layout.view_business_photo, null);
+                mHscrollviewPhotos.addView(imageView);
+                Glide.with(this).load(photo).into(imageView);
+            }
     }
 
 

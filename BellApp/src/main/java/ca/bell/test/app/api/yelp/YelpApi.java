@@ -17,6 +17,7 @@ import java.util.Map;
 
 import ca.bell.test.app.BuildConfig;
 import ca.bell.test.app.api.RestoApi;
+import ca.bell.test.app.resto.Business;
 import ca.bell.test.app.resto.Search;
 /*
  *  Android library
@@ -41,9 +42,6 @@ public class YelpApi implements RestoApi {
     private RequestQueue mRequestQueue;
     private Context mCtx;
     private Cache mCache;
-
-    private static final String TAG = "YELP_API";
-
 
     private YelpApi(Context context) {
         mCtx = context.getApplicationContext();
@@ -71,9 +69,8 @@ public class YelpApi implements RestoApi {
     }
 
 
-    public void request(final Search search, final SearchResponse searchResponse) {
+    private void request(final Search search, final SearchResponse searchResponse) {
         StringBuilder urlSearch = new StringBuilder("https://api.yelp.com/v3/businesses/search?categories=restaurants&");
-
         if (search.isSortByDistance())
             urlSearch.append("&sort_by=distance");
         else if (search.isSortByRating())
@@ -82,64 +79,68 @@ public class YelpApi implements RestoApi {
         urlSearch.append("&offset=" + search.getOffset());
         urlSearch.append("&limit=" + Search.LIMIT);
 
-        if (search.getQuery() != null) {
+        if (search.getQuery() != null && search.getQuery().length() > 0) {
             urlSearch.append("&term=" + search.getQuery());
         }
-        if (search.getLocation() != null) {
+        if (search.getLocation() != null && search.getLocation().length() > 0) {
             urlSearch.append( "&location=" + search.getLocation());
-        }
-        else  {
+        } else if (search.hasLocation()) {
             urlSearch.append( "&latitude=" + search.getLat());
             urlSearch.append("&longitude=" + search.getLng());
-        }
+        } else return;
 
         final Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + BuildConfig.API_KEY);
-
-
         final Response.Listener<Search> responseSearch = new Response.Listener<Search>() {
             @Override
             public void onResponse(Search response) {
-                response.mapQuery(search);
-                response.setOffset(search.getOffset() + Search.LIMIT);
+                response.syncPagingSearch(search);
                 searchResponse.onSuccess(response);
             }
         };
-
         Response.ErrorListener responseError = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 searchResponse.onError(error);
             }
         };
-
         GsonRequest<Search> searchGsonRequest = new GsonRequest<>(urlSearch.toString(), Search.class, headers,
                 responseSearch, responseError);
+        mRequestQueue.add(searchGsonRequest);
+    }
 
-
-        searchGsonRequest.setTag(TAG);
-
-
+    private void requestDetail(final String businessId, final SearchResponse<Business> businessResponse) {
+        StringBuilder urlSearch = new StringBuilder("https://api.yelp.com/v3/businesses/" + businessId);
+        final Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + BuildConfig.API_KEY);
+        final Response.Listener<Business> responseBusiness = new Response.Listener<Business>() {
+            @Override
+            public void onResponse(Business response) {
+                businessResponse.onSuccess(response);
+            }
+        };
+        Response.ErrorListener responseError = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                businessResponse.onError(error);
+            }
+        };
+        GsonRequest<Business> searchGsonRequest = new GsonRequest<>(urlSearch.toString(), Business.class, headers,
+                responseBusiness, responseError);
         mRequestQueue.add(searchGsonRequest);
     }
 
 
-    public void cancelAll() {
-        if (mRequestQueue != null) {
-            mRequestQueue.cancelAll(TAG);
-        }
-    }
-
-
     @Override
-    public void search(Search search, SearchResponse response) {
-        // check if has string location
-        // else if has position
+    public void search(Search search, SearchResponse<Search> response) {
+        // check if has string location else if has position
         request(search, response);
     }
 
-
-
+    @Override
+    public void getDetail(String restoid, SearchResponse<Business> response) {
+        requestDetail(restoid, response);
+    }
 }
 
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/space_medium"
-    app:cardCornerRadius="@dimen/cardview_corner_radius"
+    app:cardCornerRadius="@dimen/cardview_corner_radius" android:id="@+id/cardviewBusinessHeader"
     app:cardElevation="@dimen/cardview_elevation">
 
 
@@ -14,13 +14,12 @@
 
         <ImageView
             android:id="@+id/imgBusiness"
-            android:layout_width="@dimen/resto_image_size"
+            android:layout_width="@dimen/resto_image_size" android:transitionName="businessDetail"
             android:layout_height="@dimen/resto_image_size"
             android:background="#10333333"
             android:layout_alignParentLeft="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_restopink_big"
-            android:transitionName="imageBusiness" />
+            android:src="@drawable/ic_restopink_big"  />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,13 +37,24 @@
                 android:textSize="@dimen/text_size_big"
                 android:textStyle="bold" />
 
-            <RatingBar
-                android:id="@+id/ratingBarBusiness"
-                style="@style/RatingBar"
+            <LinearLayout android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                android:numStars="5" />
+                android:layout_height="wrap_content">
+                <RatingBar
+                    android:id="@+id/ratingBarBusiness"
+                    style="@style/RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="5" />
+                <TextView
+                    android:id="@+id/txtReviewCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:layout_marginLeft="@dimen/space_small"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
 
 
             <TextView

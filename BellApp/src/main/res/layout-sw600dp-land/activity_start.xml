@@ -29,12 +29,12 @@
             android:layout_height="match_parent"
             android:layout_weight="2" />
 
-        <FrameLayout
+        <FrameLayout android:padding="4dp"
             android:id="@+id/containerFragmentDetail"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_box"
+            android:background="@drawable/bg_box_thick"
             android:visibility="gone" />
     </LinearLayout>
 

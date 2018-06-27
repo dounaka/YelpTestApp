@@ -7,7 +7,7 @@
     <string name="title_history">History</string>
     <string name="ok">Ok</string>
     <string name="title_activity_intro">IntroActivity</string>
-    <string name="search_resto">Search restaurant</string>
+    <string name="search_resto">Search</string>
     <string name="search_location_hint">By address, city or postal code</string>
     <string name="search_business_hint">By business name</string>
 
@@ -19,7 +19,7 @@
 
     <string name="sortByDistanceAsc">Sort by distance</string>
     <string name="sortByRatingAsc">Sort by rating</string>
-    <string name="title_activity_business_detail">BusinessDetailActivity</string>
+    <string name="title_activity_business_detail">Restaurant</string>
 
 
 </resources>

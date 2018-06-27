@@ -27,13 +27,4 @@ public class YelpApiTest {
     }
 
 
-    @Test
-    public void runQuery() {
-        Context appContext = InstrumentationRegistry.getTargetContext();
-        YelpApi yelpApi1 = YelpApi.getInstance(appContext);
-
-        yelpApi1.request();
-
-
-    }
 }

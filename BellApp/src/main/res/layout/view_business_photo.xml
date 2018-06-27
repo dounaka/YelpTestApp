@@ -1,0 +1,7 @@
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/resto_photo_size"
+    android:layout_height="@dimen/resto_photo_size"
+    android:adjustViewBounds="true"
+    android:padding="@dimen/space_small"
+    android:scaleType="centerCrop" />
+

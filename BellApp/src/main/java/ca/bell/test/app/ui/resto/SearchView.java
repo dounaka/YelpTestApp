@@ -149,14 +149,6 @@ public class SearchView extends EntityView<Search> implements View.OnClickListen
     }
 
     @Override
-    public void show(Search search) {
-        if (this.entity != null && this.entity.getBusinesses().size() > 0)
-            search.getBusinesses().addAll(0, this.entity.getBusinesses());
-        this.entity = search;
-        showEntity(this.entity);
-    }
-
-    @Override
     protected void showEntity(Search search) {
         ignoreChange = true; // disable textWatcher
         final int total = search.getBusinesses().size();

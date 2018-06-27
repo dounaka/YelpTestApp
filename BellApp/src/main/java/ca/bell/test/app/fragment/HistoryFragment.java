@@ -26,7 +26,7 @@ import ca.bell.test.app.R;
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     http://www.gnu.org/licenses/gpl.html
  */
-public class HistoryFragment extends android.support.v4.app.Fragment {
+public class HistoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

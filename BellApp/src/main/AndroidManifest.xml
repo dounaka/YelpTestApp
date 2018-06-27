@@ -25,7 +25,8 @@
         </activity>
         <activity
             android:name=".BusinessDetailActivity"
-            android:label="@string/title_activity_business_detail"></activity>
+            android:label="@string/title_activity_business_detail"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

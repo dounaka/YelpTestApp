@@ -7,5 +7,6 @@
 
     <color name="gold">#D7B33C</color>
     <color name="white">#FFFFFF</color>
+    <color name="lightgray">#88999999</color>
 
 </resources>

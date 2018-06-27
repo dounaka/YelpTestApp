@@ -1,13 +1,20 @@
 package ca.bell.test.app.fragment;
 
 import android.app.Fragment;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ca.bell.test.app.R;
+import ca.bell.test.app.api.RestoApi;
+import ca.bell.test.app.api.RestoFactory;
+import ca.bell.test.app.resto.Business;
+import ca.bell.test.app.resto.Search;
+import ca.bell.test.app.ui.resto.BusinessDetailView;
 
 /*
  *  Android library
@@ -27,12 +34,65 @@ import ca.bell.test.app.R;
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     http://www.gnu.org/licenses/gpl.html
  */
-public class BusinessFragment extends Fragment {
+
+//TODO refactoring / using support.v4.fragment because of LiveData
+public class BusinessFragment extends android.support.v4.app.Fragment {
+
+    public static final String KEY_BUSINESS = "key.business";
+
+    private BusinessDetailViewModel mBusinessModel;
+    private Observer<Business> businessObserver;
+
+    BusinessDetailView businessDetailView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mBusinessModel = ViewModelProviders.of(this).get(BusinessDetailViewModel.class);
+        businessObserver = new Observer<Business>() {
+            @Override
+            public void onChanged(@Nullable Business b) {
+                if (businessDetailView != null) {
+                    businessDetailView.show(b);
+                }
+            }
+        };
+        mBusinessModel.getBusiness().observe(this, businessObserver);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        businessDetailView = new BusinessDetailView(getActivity());
+        return businessDetailView;
+    }
 
-        View mainView = inflater.inflate(R.layout.fragment_favorite, container, false);
-        return mainView;
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Business business = (Business) getArguments().getSerializable(KEY_BUSINESS);
+        businessDetailView.show(business);
+
+        RestoFactory.getRestoApi(getActivity()).getDetail(business.getId(), new RestoApi.SearchResponse<Business>() {
+            @Override
+            public void onError(Exception ex) {
+                //TODO manage error / inform user of technical errors and report error
+            }
+
+            @Override
+            public void onSuccess(Business businessResult) {
+                mBusinessModel.getBusiness().setValue(businessResult);
+            }
+        });
+    }
+
+
+    public static final BusinessFragment create(Business business) {
+        final BusinessFragment businessFragment = new BusinessFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(BusinessFragment.KEY_BUSINESS, business);
+        businessFragment.setArguments(args);
+        return businessFragment;
     }
 }

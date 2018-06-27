@@ -1,4 +1,11 @@
-package ca.bell.test.app.resto;
+package ca.bell.test.app.fragment;
+
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
+
+import ca.bell.test.app.resto.Business;
+import ca.bell.test.app.resto.Search;
+
 /*
  *  Android library
     Copyright (C) 2018 Icati inc. - Canada
@@ -17,26 +24,10 @@ package ca.bell.test.app.resto;
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     http://www.gnu.org/licenses/gpl.html
  */
-
-import java.io.Serializable;
-
-/**
- * App Entity
- * Allow to manage persistance, cache, view display at a higher level and factorize code
- */
-public abstract class Entity implements Serializable {
-
-    protected static final String SEP = "_";
-
-    public abstract String getId();
-
-    public String getUid() {
-        return getUid(this.getClass(), getId());
+public class BusinessDetailViewModel extends ViewModel{
+    private MutableLiveData<Business> mBusiness;
+    public MutableLiveData<Business> getBusiness()  {
+        if (mBusiness ==null) mBusiness = new MutableLiveData<>();
+        return mBusiness;
     }
-
-    public static String getUid(Class clazz, String id) {
-        return clazz.getSimpleName() + SEP + id;
-    }
-
-
 }

@@ -1,8 +1,10 @@
 package ca.bell.test.app;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -10,22 +12,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import ca.bell.test.app.fragment.BusinessFragment;
 import ca.bell.test.app.fragment.FavoriteFragment;
 import ca.bell.test.app.fragment.HistoryFragment;
 import ca.bell.test.app.fragment.SearchFragment;
 import ca.bell.test.app.fragment.SearchViewModel;
 import ca.bell.test.app.permission.LocationPermission;
 import ca.bell.test.app.resto.Business;
+import ca.bell.test.app.resto.Search;
 
 /*
  *  Android library
@@ -57,7 +59,9 @@ public class RestoActivity extends AppCompatActivity {
         final Observer<Business> searchObserver = new Observer<Business>() {
             @Override
             public void onChanged(@Nullable Business business) {
-                show(business);
+                if (business != null)
+                    show(business);
+                else if (detailView != null) detailView.setVisibility(View.GONE);
             }
         };
         mSearchModel.getSelectedBusiness().observe(this, searchObserver);
@@ -84,38 +88,34 @@ public class RestoActivity extends AppCompatActivity {
     }
 
     private void show(Business business) {
-
-        if (detailView == null) Toast.makeText(this, "open new activity", Toast.LENGTH_LONG).show();
-        else
-            detailView.setVisibility(View.VISIBLE); // and replace with detail fragment !!
-
+        if (detailView == null) {
+            Intent bizzDetailIntent = new Intent(this, BusinessDetailActivity.class);
+            bizzDetailIntent.putExtra(BusinessFragment.KEY_BUSINESS, business);
+            startActivity(bizzDetailIntent);
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.containerFragmentDetail, BusinessFragment.create(business)).commit();
+            detailView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showSearchFragment() {
         SearchFragment fragment = new SearchFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private void showFavoriteFragment() {
         if (detailView != null) detailView.setVisibility(View.GONE);
         FavoriteFragment fragment = new FavoriteFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private void showHistoryFragment() {
         if (detailView != null) detailView.setVisibility(View.GONE);
         HistoryFragment fragment = new HistoryFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.containerFragmentList, fragment).commit();
     }
 
     private FusedLocationProviderClient mFusedLocationClient;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-    }
 
 
     @Override
@@ -134,12 +134,18 @@ public class RestoActivity extends AppCompatActivity {
     }
 
     private void showCurrentLocation() {
-        Toast.makeText(this, "Request location ok ", Toast.LENGTH_SHORT).show();
         OnSuccessListener successListener = new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-                    Log.d("location", location.toString());
+                    Search search = mSearchModel.getCurrentSearch().getValue();
+                    if (search.getLocation() != null) return;
+                    search.setLat(location.getLatitude());
+                    search.setLng(location.getLongitude());
+                    Fragment fragment = getFragmentManager().findFragmentById(R.id.containerFragmentList);
+                    if (fragment instanceof SearchFragment) {
+                        ((SearchFragment) fragment).onNewSearch(search);
+                    }
                 }
             }
         };

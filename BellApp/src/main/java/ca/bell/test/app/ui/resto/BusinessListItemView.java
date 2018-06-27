@@ -1,6 +1,9 @@
 package ca.bell.test.app.ui.resto;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -32,10 +35,14 @@ import ca.bell.test.app.ui.EntityView;
 public class BusinessListItemView extends EntityView<Business> {
     private ImageView mImgBusiness;
     private RatingBar mRatingBar;
-    private TextView mtxtName, mTxtPrice, mTxtDistance;
+    private TextView mtxtName, mTxtPrice, mTxtDistance, mTxtReviewCount;
 
     public BusinessListItemView(Context ctx) {
         super(ctx);
+    }
+
+    public BusinessListItemView(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     @Override
@@ -49,27 +56,33 @@ public class BusinessListItemView extends EntityView<Business> {
         mRatingBar = findViewById(R.id.ratingBarBusiness);
         mtxtName = findViewById(R.id.txtName);
         mTxtPrice = findViewById(R.id.txtPrice);
-        mTxtDistance = findViewById(R.id.txtDistance);
+        mTxtDistance = findViewById(R.id.txtDistance);mTxtReviewCount = findViewById(R.id.txtReviewCount);
     }
 
     @Override
     protected void showEntity(Business business) {
         mtxtName.setText(business.getName());
         mTxtPrice.setText(business.getPrice());
-//        StringBuilder displayAddress = new StringBuilder();
-//        boolean first = true;
-//        for (String address : business.getLocation().getDisplayAddress()) {
-//            displayAddress.append((first ? "" : "\n") + address);
-//            first = false;
-//        }
-//        mTxtPhone.setText(business.getDisplayPhone());
-//        mTxtAddress.setText(displayAddress.toString());
+
         mTxtDistance.setText(getKm(business.getDistance() / 1000));
         Glide.with(this).load(business.getImageUrl()).into(mImgBusiness);
         mRatingBar.setRating(business.getRating());
+        //TODO replace by a string resource with parameter
+        mTxtReviewCount.setText("(" + business.getReviewCount() + ")");
+
 
     }
 
+
+    public void setFlatView() {
+        CardView cardView = findViewById(R.id.cardviewBusinessHeader);
+        cardView.setElevation(0);
+        cardView.setRadius(0);
+        ViewGroup.MarginLayoutParams layoutParams =
+                (ViewGroup.MarginLayoutParams) cardView.getLayoutParams();
+        layoutParams.setMargins(0, 0, 0, 0);
+        cardView.requestLayout();
+    }
 
     public static String getKm(float km) {
         final String doubleZero = "00";
